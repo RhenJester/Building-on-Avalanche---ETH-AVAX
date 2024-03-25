@@ -14,7 +14,11 @@ contract DegenToken is ERC20, Ownable {
     mapping(address => uint256) public playerInventory;
     uint256 public nextItemId = 1;
 
-    constructor() ERC20("Degen", "DGN") {}
+    constructor() ERC20("Degen", "DGN") {
+    addItem("Box", 2);
+    addItem("Ball", 10);
+    addItem("Spoon", 5);
+    }
 
     function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount);
@@ -33,7 +37,7 @@ contract DegenToken is ERC20, Ownable {
         require(bytes(item.name).length > 0, "Invalid item id");
         require(balanceOf(msg.sender) >= item.price, "Insufficient balance");
 
-        _transfer(msg.sender, owner(), item.price);
+        _burn(msg.sender, item.price);
         playerInventory[msg.sender] += 1;
         return true;
     }
